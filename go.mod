@@ -1,4 +1,4 @@
-module gitlab.com/go-package/logger
+module github.com/zhang1061260710/go-package/logger
 
 go 1.16
 
