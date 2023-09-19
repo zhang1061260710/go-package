@@ -1,7 +1,7 @@
 package testing
 
 import (
-	"github.com/zhang1061260710/go-package/logger/logger"
+	"github.com/zhang1061260710/go-package/logger"
 	"go.uber.org/zap"
 	"testing"
 )

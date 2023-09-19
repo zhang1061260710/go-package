@@ -8,7 +8,7 @@ import (
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"github.com/zhang1061260710/go-package/logger/common"
+	"github.com/zhang1061260710/go-package/common"
 	"io/ioutil"
 	"time"
 )

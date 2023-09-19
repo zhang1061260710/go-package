@@ -1,8 +1,8 @@
 package logger
 
 import (
-	"github.com/zhang1061260710/go-package/logger/logger/logrus"
-	"github.com/zhang1061260710/go-package/logger/logger/zap"
+	"github.com/zhang1061260710/go-package/logger/logrus"
+	"github.com/zhang1061260710/go-package/logger/zap"
 )
 
 func NewLogrusLoggerClient() *logrus.LogrusLogger {
