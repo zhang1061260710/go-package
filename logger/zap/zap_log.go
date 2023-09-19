@@ -5,7 +5,7 @@ import (
 	"github.com/hashicorp/go-uuid"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/spf13/viper"
-	"gitlab.com/go-package/logger/common"
+	"github.com/zhang1061260710/go-package/logger/common"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
 	"io"

@@ -2,7 +2,7 @@ package testing
 
 import (
 	"github.com/sirupsen/logrus"
-	"gitlab.com/go-package/logger/logger"
+	"github.com/zhang1061260710/go-package/logger/logger"
 	"testing"
 )
 
