@@ -78,22 +78,22 @@ func getWriter(logPath string) (*rotatelogs.RotateLogs, *rotatelogs.RotateLogs, 
 	}
 
 	writerInfo, _ := rotatelogs.New(
-		logPath+".info.log-%Y%m%d",
-		rotatelogs.WithLinkName(logPath+".info.log"),
+		logPath+"-info-%Y%m%d.log",
+		rotatelogs.WithLinkName(logPath+"-info.log"),
 		rotatelogs.WithMaxAge(time.Hour*24*time.Duration(withMaxAge)),
 		rotatelogs.WithRotationTime(time.Hour*time.Duration(withRotationTime)),
 		rotatelogs.WithRotationSize(withRotationSize*1024*1024),
 	)
 	writerError, _ := rotatelogs.New(
-		logPath+".error.log-%Y%m%d",
-		rotatelogs.WithLinkName(logPath+".error.log"),
+		logPath+"-error-%Y%m%d.log",
+		rotatelogs.WithLinkName(logPath+"-error.log"),
 		rotatelogs.WithMaxAge(time.Hour*24*time.Duration(withMaxAge)),
 		rotatelogs.WithRotationTime(time.Hour*time.Duration(withRotationTime)),
 		rotatelogs.WithRotationSize(withRotationSize*1024*1024),
 	)
 	writerWarn, _ := rotatelogs.New(
-		logPath+".warn.log-%Y%m%d",
-		rotatelogs.WithLinkName(logPath+".warn.log"),
+		logPath+"-warn-%Y%m%d.log",
+		rotatelogs.WithLinkName(logPath+"-warn.log"),
 		rotatelogs.WithMaxAge(time.Hour*24*time.Duration(withMaxAge)),
 		rotatelogs.WithRotationTime(time.Hour*time.Duration(withRotationTime)),
 		rotatelogs.WithRotationSize(withRotationSize*1024*1024),
