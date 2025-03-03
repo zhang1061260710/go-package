@@ -10,6 +10,7 @@ import (
 	"github.com/spf13/viper"
 	"github.com/zhang1061260710/go-package/common"
 	"io/ioutil"
+	"sort"
 	"time"
 )
 
@@ -101,7 +102,7 @@ func getWriter(logPath string) (*rotatelogs.RotateLogs, *rotatelogs.RotateLogs, 
 	return writerInfo, writerError, writerWarn
 }
 
-type DiyFormatter struct {
+/*type DiyFormatter struct {
 }
 
 func (m *DiyFormatter) Format(entry *logrus.Entry) ([]byte, error) {
@@ -129,4 +130,74 @@ func (m *DiyFormatter) Format(entry *logrus.Entry) ([]byte, error) {
 	}
 	b.WriteString("\n")
 	return b.Bytes(), nil
+}*/
+
+type DiyFormatter struct {
+	fixedFields []string // 定义固定字段的顺序
 }
+
+// 判断字符串是否在切片中
+func contains(slice []string, item string) bool {
+	for _, s := range slice {
+		if s == item {
+			return true
+		}
+	}
+	return false
+}
+func (m *DiyFormatter) Format(entry *logrus.Entry) ([]byte, error) {
+	var b *bytes.Buffer
+	if entry.Buffer != nil {
+		b = entry.Buffer
+	} else {
+		b = &bytes.Buffer{}
+	}
+
+	// 输出时间、日志级别和消息
+	timestamp := entry.Time.Format("2006-01-02 15:04:05")
+	newLog := fmt.Sprintf("[%s] [%s] %s - ", timestamp, entry.Level, entry.Message)
+	b.WriteString(newLog)
+
+	// 优先输出固定字段
+	for _, field := range m.fixedFields {
+		if value, ok := entry.Data[field]; ok {
+			if err, ok := value.(error); ok {
+				b.WriteString(fmt.Sprintf("%s:%s\t", field, err.Error()))
+			} else {
+				data, err := jsoniter.MarshalToString(value)
+				if err != nil {
+					b.WriteString(fmt.Sprintf("%s:%v\t", field, value)) // 如果序列化失败，直接输出原始值
+				} else {
+					b.WriteString(fmt.Sprintf("%s:%s\t", field, data))
+				}
+			}
+		}
+	}
+
+	// 输出其他字段
+	otherFields := make([]string, 0, len(entry.Data))
+	for field := range entry.Data {
+		if !contains(m.fixedFields, field) { // 过滤掉已经输出的固定字段
+			otherFields = append(otherFields, field)
+		}
+	}
+	sort.Strings(otherFields) // 按字母顺序排序
+
+	for _, field := range otherFields {
+		value := entry.Data[field]
+		if err, ok := value.(error); ok {
+			b.WriteString(fmt.Sprintf("%s:%s\t", field, err.Error()))
+		} else {
+			data, err := jsoniter.MarshalToString(value)
+			if err != nil {
+				b.WriteString(fmt.Sprintf("%s:%v\t", field, value)) // 如果序列化失败，直接输出原始值
+			} else {
+				b.WriteString(fmt.Sprintf("%s:%s\t", field, data))
+			}
+		}
+	}
+
+	b.WriteString("\n")
+	return b.Bytes(), nil
+}
+
